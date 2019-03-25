@@ -1,4 +1,5 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useState, useRef } from "react";
+import Prism from "prismjs";
 
 import useIntersectionObserver from "./useIntersectionObserver";
 
@@ -35,6 +36,7 @@ const Sketch = ({ code, id }) => {
   useEffect(() => {
     canvasEl.current.textContent = code;
     compileAndRun(code);
+    Prism.highlightAll();
   });
 
   useIntersectionObserver(canvasEl, playWhenVisible);
@@ -45,10 +47,15 @@ const Sketch = ({ code, id }) => {
       <hr className="Sketch__separator" />
       <pre
         className="Sketch__code"
-        contentEditable
-        ref={canvasEl}
-        spellCheck="false"
-      />
+        title="You can edit this and then click the Run button to see the changes live"
+      >
+        <code
+          contentEditable
+          spellCheck="false"
+          ref={codeEl}
+          className="language-java"
+        />
+      </pre>
       <div className="Sketch__buttons">
         <button onClick={stopLoop}>◼</button>
         <button onClick={updateCode}>↷</button>
