@@ -7,9 +7,13 @@ body {
 
 header h1 {
   font-size: 4rem;
+  font-size: calc(1rem + 2vh + 2vw);
   font-weight: 100;
   text-align: center;
-  margin: -10px 0 20px;
+  margin: -10px auto 20px;
+  @media (max-width: 600px) {
+    max-width: 10ch;
+  }
 }
 
 header img {
