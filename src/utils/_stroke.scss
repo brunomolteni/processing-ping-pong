@@ -1,0 +1,10 @@
+@mixin stroke($width, $color) {
+  $shadow: ();
+  @for $i from -$width through $width {
+    $shadow: append($shadow, #{$width} #{$i} $color, comma);
+    $shadow: append($shadow, #{-$width} #{$i} $color, comma);
+    $shadow: append($shadow, #{$i} #{$width} $color, comma);
+    $shadow: append($shadow, #{$i} #{-$width} $color, comma);
+  }
+  text-shadow: $shadow;
+}

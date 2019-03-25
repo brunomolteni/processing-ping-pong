@@ -1,4 +1,4 @@
-// This fixes processing code that breaks processing-js rendering
+// This fixes processing code that breaks processing.js rendering
 
 export default code =>
   code
