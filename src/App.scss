@@ -1,0 +1,30 @@
+body {
+  font-family: "Source Sans Pro", sans-serif;
+  text-align: center;
+  color: white;
+  background-color: hsl(120, 50%, 5%);
+}
+
+header h1 {
+  font-size: 4rem;
+  font-weight: 100;
+  text-align: center;
+  margin: -10px 0 20px;
+}
+
+header img {
+  margin-top: 10px;
+}
+
+a {
+  color: hsl(120, 40%, 35%);
+  &:hover {
+    color: hsl(120, 30%, 80%);
+  }
+}
+
+footer {
+  padding-top: 10px;
+  font-size: 0.7em;
+  color: hsl(120, 30%, 80%);
+}

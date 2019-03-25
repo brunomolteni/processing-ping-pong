@@ -1,0 +1,33 @@
+{
+  "name": "processing-ping-pong",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "processing-js": "^1.6.6",
+    "react": "^16.8.5",
+    "react-dom": "^16.8.5"
+  },
+  "devDependencies": {
+    "acorn": "^6.1.1",
+    "node-sass": "^4.11.0",
+    "poi": "^12.5.7",
+    "prettier": "^1.16.4",
+    "react-hot-loader": "^4.8.0",
+    "sass-loader": "^7.1.0"
+  },
+  "scripts": {
+    "start": "poi --serve --open",
+    "build": "poi --prod"
+  },
+  "author": "",
+  "license": "ISC",
+  "babels": {
+    "presets": [
+      "poi/babel"
+    ],
+    "plugins": [
+      "react-hot-loader/babel"
+    ]
+  }
+}
