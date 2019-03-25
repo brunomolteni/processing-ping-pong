@@ -76,6 +76,9 @@
     @media (max-width: 600px) {
       margin: 20px 0;
       max-height: calc(100vw - 80px);
+      & code {
+        max-height: calc(100vw - 80px);
+      }
     }
   }
 
