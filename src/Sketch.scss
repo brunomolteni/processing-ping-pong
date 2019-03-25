@@ -54,6 +54,8 @@
     left: 50%;
     bottom: -50px;
     transform: translateX(-50%);
+    display: flex;
+    align-items: center;
 
     button {
       height: 40px;
@@ -72,6 +74,14 @@
       &:last-child {
         border-radius: 0 0 10px 0;
       }
+      @media (min-width: 600px) {
+        &:nth-child(3) {
+          display: none;
+        }
+        &:nth-child(2) {
+          border-radius: 0 0 10px 0;
+        }
+      }
     }
   }
 
@@ -86,6 +96,15 @@
     @media (max-width: 600px) {
       height: 10px;
       width: 100%;
+    }
+  }
+
+  @media (max-width: 600px) {
+    &:not(.--expanded) {
+      .Sketch__code,
+      .Sketch__separator {
+        display: none;
+      }
     }
   }
 }
