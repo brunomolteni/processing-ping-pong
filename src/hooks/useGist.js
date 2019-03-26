@@ -6,18 +6,11 @@ const hasCode = comment => comment.body.indexOf("```") > -1;
 const getCode = comment => comment.body.match(/```(?:java)?\s?([^`]*)/)[1];
 const getFirstFile = files => Object.entries(files)[0][1];
 
-const useGist = () => {
+const useGist = gistId => {
   const [currentGist, setCurrentGist] = useState(null);
 
   useEffect(() => {
     let fetchGist = async () => {
-      let gistId = document.location.search.split("id=").pop();
-
-      if (!gistId) {
-        gistId = "0bc9ad44727739ce6b1b23c88083a263";
-        document.location.search = `?id=${gistId}`;
-      }
-
       const gist = await fetch(apiUrl(gistId)).then(getJson);
       const comments = await fetch(gist.comments_url).then(getJson);
 
