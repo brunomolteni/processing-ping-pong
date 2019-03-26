@@ -6,52 +6,45 @@ import getScrollbarWidth from "./utils/getScrollbarWidth";
 
 import "./Round.scss";
 
+import Sketch from "./Sketch";
+
 const scrollbarWidth = getScrollbarWidth();
 
 const Round = ({ code, id }) => {
   const key = `pjs-${id}`;
-  const canvasEl = useRef(null);
+  const sketchEl = useRef(null);
   const codeEl = useRef(null);
   const [isExpanded, setExpanded] = useState(false);
-  var instance = null;
+  const [currentCode, setCurrentCode] = useState(false);
 
   const toggleExpanded = () => setExpanded(!isExpanded);
 
-  const compileAndRun = code => {
-    stopLoop();
-    let sketch = Processing.compile(code);
-    instance = new Processing(key, sketch);
-    playLoop();
-  };
-
   const updateCode = () => {
     let changedCode = codeEl.current.textContent;
-    compileAndRun(changedCode);
+    changedCode === currentCode ? play() : setCurrentCode(changedCode);
   };
 
-  const stopLoop = () => {
-    !!instance && instance.noLoop();
-  };
+  const stop = () => sketchEl.current.stop();
 
-  const playLoop = () => {
-    !!instance && instance.loop();
-  };
-
-  const playWhenVisible = entries =>
-    entries.map(entry => (entry.isIntersecting ? playLoop() : stopLoop()));
+  const play = () => sketchEl.current.play();
 
   useEffect(() => {
-    codeEl.current.textContent = code;
-    compileAndRun(code);
+    codeEl.current.textContent = currentCode || code;
+    !currentCode && setCurrentCode(code);
     Prism.highlightAll();
   });
-
-  useIntersectionObserver(canvasEl, playWhenVisible);
 
   return (
     <div className={`Round ${isExpanded ? "--expanded" : ""}`}>
       <h3 className="Round__title">Round {id + 1}</h3>
-      <canvas className="Round__canvas" id={key} ref={canvasEl} />
+      {currentCode && (
+        <Sketch
+          code={currentCode}
+          id={key}
+          className="Round__canvas"
+          ref={sketchEl}
+        />
+      )}
       <hr className="Round__separator" />
       <pre
         className="Round__code"
@@ -69,7 +62,7 @@ const Round = ({ code, id }) => {
         />
       </pre>
       <div className="Round__buttons">
-        <button onClick={stopLoop}>◼ Stop</button>
+        <button onClick={stop}>◼ Stop</button>
         <button onClick={updateCode}>↻ Run</button>
         <button onClick={toggleExpanded}>↕ Code</button>
       </div>

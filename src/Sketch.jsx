@@ -1,75 +1,60 @@
-import React, { useEffect, useState, useRef } from "react";
-import Prism from "prismjs";
+import React, {
+  useEffect,
+  useState,
+  forwardRef,
+  useRef,
+  useImperativeHandle
+} from "react";
 
-import useIntersectionObserver from "./useIntersectionObserver";
+import useIntersectionObserver from "./hooks/useIntersectionObserver";
 
-import "./Sketch.scss";
-
-const Sketch = ({ code, id }) => {
-  const key = `pjs-${id}`;
+const Sketch = ({ code, id, className }, ref) => {
+  const classes = ["Sketch", className];
+  const key = `sketch-${id}`;
   const canvasEl = useRef(null);
-  const codeEl = useRef(null);
-  const [isExpanded, setExpanded] = useState(false);
-  var instance = null;
-
-  const toggleExpanded = () => setExpanded(!isExpanded);
+  const instanceRef = useRef(null);
 
   const compileAndRun = code => {
-    stopLoop();
+    exit();
     let sketch = Processing.compile(code);
-    instance = new Processing(key, sketch);
+    instanceRef.current = new Processing(key, sketch);
     playLoop();
   };
 
-  const updateCode = () => {
-    let changedCode = codeEl.current.textContent;
-    compileAndRun(changedCode);
-  };
+  const exit = () => !!instanceRef.current && instanceRef.current.exit();
 
-  const stopLoop = () => {
-    !!instance && instance.noLoop();
-  };
+  const stopLoop = () => !!instanceRef.current && instanceRef.current.noLoop();
 
-  const playLoop = () => {
-    !!instance && instance.loop();
-  };
+  const playLoop = () => !!instanceRef.current && instanceRef.current.loop();
 
   const playWhenVisible = entries =>
-    entries.map(entry => (entry.isIntersecting ? playLoop() : stopLoop()));
+    entries.map(entry => {
+      entry.isIntersecting ? playLoop() : stopLoop();
+    });
+
+  useImperativeHandle(
+    ref,
+    () => ({
+      stop: stopLoop,
+      play: playLoop
+    }),
+    [code]
+  );
 
   useEffect(() => {
-    codeEl.current.textContent = code;
     compileAndRun(code);
-    Prism.highlightAll();
-  });
+
+    return () => {
+      stopLoop();
+      exit();
+    };
+  }, [code, id]);
 
   useIntersectionObserver(canvasEl, playWhenVisible);
 
-  return (
-    <div className={`Sketch ${isExpanded ? "--expanded" : ""}`}>
-      <h3 className="Sketch__title">Round {id + 1}</h3>
-      <canvas className="Sketch__canvas" id={key} ref={canvasEl} />
-      <hr className="Sketch__separator" />
-      <pre
-        className="Sketch__code"
-        title="You can edit this and then click the Run button to see the changes live"
-      >
-        <code
-          contentEditable
-          spellCheck="false"
-          ref={codeEl}
-          className="language-java"
-        />
-      </pre>
-      <div className="Sketch__buttons">
-        <button onClick={stopLoop}>◼ Stop</button>
-        <button onClick={updateCode}>↻ Run</button>
-        <button onClick={toggleExpanded}>↕ Code</button>
-      </div>
-    </div>
-  );
+  return <canvas className={classes.join(" ")} id={key} ref={canvasEl} />;
 };
 
 Sketch.displayName = "Sketch";
 
-export default Sketch;
+export default forwardRef(Sketch);
