@@ -11,9 +11,12 @@ const useGist = () => {
 
   useEffect(() => {
     let fetchGist = async () => {
-      let gistId =
-        document.location.search.split("id=").pop() ||
-        "0bc9ad44727739ce6b1b23c88083a263";
+      let gistId = document.location.search.split("id=").pop();
+
+      if (!gistId) {
+        gistId = "0bc9ad44727739ce6b1b23c88083a263";
+        document.location.search = `?id=${gistId}`;
+      }
 
       const gist = await fetch(apiUrl(gistId)).then(getJson);
       const comments = await fetch(gist.comments_url).then(getJson);
