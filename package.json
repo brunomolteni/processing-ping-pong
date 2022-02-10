@@ -12,7 +12,7 @@
   },
   "devDependencies": {
     "acorn": "^6.1.1",
-    "node-sass": "^4.11.0",
+    "node-sass": "^7.0.0",
     "poi": "^12.5.7",
     "prettier": "^1.16.4",
     "react-hot-loader": "^4.8.0",
